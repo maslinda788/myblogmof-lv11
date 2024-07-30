@@ -10,27 +10,9 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   </head>
   <body>
-
     <div class="container">
         @foreach ($posts as $post)
-        <div class="card mt-3">
-            <div class="card-body">
-                <h4 class="card-title">{{ $post->title }} <small> ~ {{ $post->user->name }} <i>{{$post->user->email}}</i></small></h4>
-                <p class="card-text">{{ $post->content }} <hr> <h3> Comments ({{ $post->comments->count() }})</h3>
-                    @foreach ( $post->comments as $comment)
-
-                        {{-- <p>
-                            <strong>{{ $comment->user->name }} ({{ $comment->user->posts->count() }})</strong>
-                                    {{ $comment->content }}
-                        </p> --}}
-
-                        <p><strong>{{ $comment->user->name }}({{ $comment->user->posts->count() }})</strong> {{ $comment->content }}</p>
-
-                    @endforeach
-                </p>
-            </div>
-        </div>
-
+        {{ $post->title }} ({{ $post->comments_count }})<br>
         @endforeach
     </div>
 
