@@ -29,11 +29,34 @@ class PostController extends Controller
         // return response()->json($posts);
 
         // count
-        $posts = Post::withCount('comments')->get();
+        // $posts = Post::withCount('comments')->get();
 
-        return view('posts.comment', compact('posts'));
+        // $posts = Post::whereHas('comments')->count();
 
-        // return view('posts.index',compact('posts'));
+        // $posts = Post::whereDoesntHave('comments')->count();
+
+        // $posts = Post::whereHas('comments',function($q){
+        //     $q->where('user_id', 3);
+        // })->get();
+
+        // $posts = Post::with(['comments' => function($q){
+        //     $q->where('user_id', 3);
+        // }])->get();
+
+        // gabung query utk dapatkan : Post yang hanya ada comments dari user_id=3, kemudian comments yg hanya dari user_id=3
+        // $posts = Post::whereHas('comments',function($query){
+        //     $query->where('user_id',3);
+        // })->get();
+
+        $posts = Post::whereHas('comments',function($query){
+            $query->where('user_id',3);
+        })->with(['comments'=>function($query){
+            $query->where('user_id',3);
+        }])->get();
+
+        // return view('posts.comment', compact('posts'));
+
+        return view('posts.index',compact('posts'));
 
     }
 

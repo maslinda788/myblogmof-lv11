@@ -24,8 +24,8 @@
                                     {{ $comment->content }}
                         </p> --}}
 
-                        <p><strong>{{ $comment->user->name }}({{ $comment->user->posts->count() }})</strong> {{ $comment->content }}</p>
-
+                        {{-- <p><strong>{{ $comment->user->name }}({{ $comment->user->posts->count() }})</strong> {{ $comment->content }}</p> --}}
+                        <p><strong>{{ $comment->user->id.') '.$comment->user->name }}({{ $comment->user->posts->count() }})</strong> {{ $comment->content }}</p>
                     @endforeach
                 </p>
             </div>
