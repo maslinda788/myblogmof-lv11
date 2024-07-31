@@ -17,6 +17,25 @@
             <div class="card-body">
                 <h4 class="card-title">{{ $post->title }} <small> ~ {{ $post->user->name }} <i>{{$post->user->email}}</i></small></h4>
                 <p class="card-text">{{ $post->content }} <hr> <h3> Comments ({{ $post->comments->count() }})</h3>
+                    <form method="POST" name="commentForm" id="commentForm" action="{{ route('comment.store')}}" class="form-horizontal">
+                        @csrf
+
+                        <div class="row form-group {{ $errors->has('content') ? 'has-error' : '' }}">
+                            <label for="content" class="col-sm-3 control-label">Input</label>
+                            <div class="col-sm-9">
+                                <textarea id="content" name="content" class="form-control" required="required">Your text here... {{ old('content') }}</textarea>
+                                <small class="text-danger">{{ $errors->first('content') }}</small>
+                            </div>
+                        </div>
+                        
+                        <input type="hidden" name="post_id" value="{{ $post->id }}"> 
+                        <input type="hidden" name="user_id" value="{{ $post->user->id }}">  
+                        <div class="btn-group float-right">
+                            <button type="submit" class="btn btn-success">Add Comment</button>
+                        </div>
+                    
+                    </form>
+                    
                     @foreach ( $post->comments as $comment)
 
                         {{-- <p>
@@ -24,8 +43,8 @@
                                     {{ $comment->content }}
                         </p> --}}
 
-                        <p><strong>{{ $comment->user->name }}({{ $comment->user->posts->count() }})</strong> {{ $comment->content }}</p>
-
+                        {{-- <p><strong>{{ $comment->user->name }}({{ $comment->user->posts->count() }})</strong> {{ $comment->content }}</p> --}}
+                        <p><strong>{{ $comment->user->id.') '.$comment->user->name }}({{ $comment->user->posts->count() }})</strong> {{ $comment->content }}</p>
                     @endforeach
                 </p>
             </div>
