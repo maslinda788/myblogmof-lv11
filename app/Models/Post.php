@@ -31,6 +31,11 @@ class Post extends Model
         return $this->hasMany(Comment::class, 'post_id', 'id');
     }
 
+    function getRouteKeyName()
+    {
+        return 'uuid';
+    }
+
 
 
 

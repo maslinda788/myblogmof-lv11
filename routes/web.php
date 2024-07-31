@@ -19,8 +19,7 @@ Route::get('/users/{user}/show', function (User $user){
 
 Route::get('posts', [PostController::class,'index'])->name('posts.index');
 
-Route::post('comment/store', [CommentController::class,'store'])->name('comment.store');
 
-
+Route::get('posts/{post}/show', [PostController::class,'show'])->name('posts.show');
 
 
