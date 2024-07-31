@@ -73,7 +73,13 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = User::find($request->user_id);
+        $user->comments()->create([
+            'content' => $request->content,
+            'post_id' => $request->post_id,
+            'user_id' => $request->user_id,
+        ]);
+        return redirect()->route('post.index');
     }
 
     /**
