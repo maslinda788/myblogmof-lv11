@@ -17,7 +17,9 @@
             <div class="card-body">
                 <h4 class="card-title"><a href="{{ route('posts.show',['post' => $post->uuid])}}" class="">{{ $post->title }}</a> <small> ~ {{ $post->user->name }} <i>{{$post->user->email}}</i></small></h4>
                 <p class="card-text">{{ $post->content }} <hr> <h3> Comments ({{ $post->comments->count() }})</h3>
+
                     <form method="POST" name="commentForm" id="commentForm" action="" class="form-horizontal">
+
                         @csrf
 
                         <div class="row form-group {{ $errors->has('content') ? 'has-error' : '' }}">
