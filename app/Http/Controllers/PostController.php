@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -13,16 +14,15 @@ class PostController extends Controller
     public function index()
     {
         // $posts = Post::with('user','comments.user')->get()->dd();
-        // $posts = Post::select('id','title','content','author')->with(['user'=>function($q){
-        //     $q->select('id','name','email');
-        // },'comments'=>function($q){
-        //     $q->select('post_id','content','user_id');
-        // },'comments.user'=>function($q){
-        //     $q->select('id','name');
-        // }])->get(); //eager loading
+        $posts = Post::select('id','uuid','title','content','author')->with(['user'=>function($q){
+            $q->select('id','name','email');
+        },'comments'=>function($q){
+            $q->select('post_id','content','user_id');
+        },'comments.user'=>function($q){
+            $q->select('id','name');
+        }])->get(); //eager loading
 
-
-
+        $users = User::pluck('name','id');
 
         // $posts = Post::all(); //lazy loading
         // 57498
@@ -48,16 +48,26 @@ class PostController extends Controller
         //     $query->where('user_id',3);
         // })->get();
 
-        $posts = Post::whereHas('comments',function($query){
-            $query->where('user_id',3);
-        })->with(['comments'=>function($query){
-            $query->where('user_id',3);
-        }])->get();
+        // $posts = Post::whereHas('comments',function($query){
+        //     $query->where('user_id',3);
+        // })->with(['comments'=>function($query){
+        //     $query->where('user_id',3);
+        // }])->get();
 
         // return view('posts.comment', compact('posts'));
 
-        return view('posts.index',compact('posts'));
+        return view('posts.index',compact('posts','users'));
 
+    }
+
+    function ajaxloadpost(Request $request) {
+        try {
+            $post = Post::where('uuid',$request->uuid)->first();
+        } catch (\Throwable $th) {
+            abort(404);
+        }
+
+        return response()->json($post);
     }
 
     /**
@@ -73,23 +83,21 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $user = User::find($request->user_id);
-        $user->comments()->create([
-            'content' => $request->content,
-            'post_id' => $request->post_id,
-            'user_id' => $request->user_id,
-        ]);
-        return redirect()->route('post.index');
+        // 
     }
 
     /**
      * Display the specified resource.
      */
-    public function show($post)
+    public function show(Post $post)
     {
-        $posts = Post::where('uuid',$post)->get(); //dd($posts);
+        // $posts = Post::where('uuid',$post)->get(); //dd($posts);
 
-        return view('posts.index',compact('posts'));
+        $users = User::pluck('name','id');
+
+        $post = $post->load('user.posts','comments.user.posts');
+
+        return view('posts.show',compact('post','users'));
     }
 
     /**

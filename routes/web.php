@@ -22,4 +22,7 @@ Route::get('posts', [PostController::class,'index'])->name('posts.index');
 
 Route::get('posts/{post}/show', [PostController::class,'show'])->name('posts.show');
 
+Route::post('comment', [CommentController::class,'store'])->name('comment.store');
 
+
+Route::post('posts/ajaxloadpost',[PostController::class, 'ajaxloadpost'])->name('posts.ajaxloadpost');
