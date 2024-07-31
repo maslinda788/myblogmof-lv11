@@ -21,7 +21,7 @@ class PostController extends Controller
         //     $q->select('id','name');
         // }])->get(); //eager loading
 
-        
+
 
 
         // $posts = Post::all(); //lazy loading
@@ -79,9 +79,11 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Post $post)
+    public function show($post)
     {
-        //
+        $posts = Post::where('uuid',$post)->get(); //dd($posts);
+
+        return view('posts.index',compact('posts'));
     }
 
     /**
